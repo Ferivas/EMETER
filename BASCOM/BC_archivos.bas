@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 153
+$projecttime = 107
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -44,20 +44,6 @@ Dim Idslaveeep As Eram Byte
 Dim Tmpcrc32 As Long
 Dim Trytx As Byte
 Dim Txok As Bit
-
-Dim Tmps As Single
-Dim Bs1 As Byte At Tmps Overlay
-Dim Bs2 As Byte At Tmps + 1 Overlay
-Dim Bs3 As Byte At Tmps + 2 Overlay
-Dim Bs4 As Byte At Tmps + 3 Overlay
-
-Dim Tmpdw As Dword
-Dim Bdw1 As Byte At Tmpdw Overlay
-Dim Bdw2 As Byte At Tmpdw + 1 Overlay
-Dim Bdw3 As Byte At Tmpdw + 2 Overlay
-Dim Bdw4 As Byte At Tmpdw + 3 Overlay
-
-
 
 'Variables para transmisiones automáticas
 Dim Autoval(numtxaut) As Long , Autovaleep(numtxaut) As Eram Long
@@ -358,12 +344,12 @@ Sub Txmdb()
    Ptrmod = 0
    If Enabug.3 = 1 Then
       Print #1 , "TX " ; Hex(addrmdb)
-      Print #1 , Makemodbus(idslave , 3 , Addrmdb , 16)
+      Print #1 , Makemodbus(idslave , 4 , Addrmdb , 16)
    End If
    Set Inicntrm
    Set Dir485
-   Print #4 , Makemodbus(idslave , 3 , Addrmdb , 16);
-   Waitus 1500
+   Print #4 , Makemodbus(idslave , 4 , Addrmdb , 16);
+   Waitus 300
    Reset Dir485
 '   Set Inicntrm
    Set Rdnormal
@@ -388,39 +374,60 @@ Sub Rxmdb()
    If W = Tmpw Then
       If Rdnormal = 1 Then
          If Addrmdb = Addr0 Then
-            Bdw4 = Tblmod(4)
-            Bdw3 = Tblmod(5)
-            Bdw2 = Tblmod(6)
-            Bdw1 = Tblmod(7)
-            Print #1 , "V3fs=" ; Tmpdw
-
-            Bdw4 = Tblmod(8)
-            Bdw3 = Tblmod(9)
-            Bdw2 = Tblmod(10)
-            Bdw1 = Tblmod(11)
-            Print #1 , "Vl1n=" ; Tmpdw
-
-            Bdw4 = Tblmod(12)
-            Bdw3 = Tblmod(13)
-            Bdw2 = Tblmod(14)
-            Bdw1 = Tblmod(15)
-            Print #1 , "Vl2n=" ; Tmpdw
-
-
-            Bdw4 = Tblmod(16)
-            Bdw3 = Tblmod(17)
-            Bdw2 = Tblmod(18)
-            Bdw1 = Tblmod(19)
-            Print #1 , "Vl3n=" ; Tmpdw
-
+            Regmdb = Makeint(tblmod(5) , Tblmod(4))
+            Vps = Regmdb / 100
+            Regmdb = Makeint(tblmod(7) , Tblmod(6))
+            Ips = Regmdb / 100
+            Regmdb = Makeint(tblmod(9) , Tblmod(8))
+            Pwrps = Regmdb / 100
+            Regmdb = Makeint(tblmod(11) , Tblmod(10))
+            Pwrin = Regmdb / 100
+            Regmdb = Makeint(tblmod(13) , Tblmod(12))
+            Vbat = Regmdb / 100
+            Regmdb = Makeint(tblmod(15) , Tblmod(14))
+            Ibatch = Regmdb / 100
+            Regmdb = Makeint(tblmod(17) , Tblmod(16))
+            Pwrbch = Regmdb / 100
+            Regmdb = Makeint(tblmod(19) , Tblmod(18))
+            Pwrout = Regmdb / 100
+            If Enabug.3 = 1 Then
+               Print #1 , "Vps=" ; Fusing(vps , "#.##")
+               Print #1 , "Ips=" ; Fusing(ips , "#.##")
+               Print #1 , "Pwrps=" ; Fusing(pwrps , "#.##")
+               Print #1 , "Pwrin=" ; Fusing(pwrin , "#.##")
+               Print #1 , "Vbat=" ; Fusing(vbat , "#.##")
+               Print #1 , "Ibatch=" ; Fusing(ibatch , "#.##")
+               Print #1 , "Pwrbch=" ; Fusing(pwrbch , "#.##")
+               Print #1 , "Pwrout=" ; Fusing(pwrbch , "#.##")
+            End If
          End If
          If Addrmdb = Addr1 Then
-            Bdw4 = Tblmod(4)
-            Bdw3 = Tblmod(5)
-            Bdw2 = Tblmod(6)
-            Bdw1 = Tblmod(7)
-            Print #1 , "frec=" ; Tmpdw
-
+            Regmdb = Makeint(tblmod(5) , Tblmod(4))
+            Vload = Regmdb / 100
+            Regmdb = Makeint(tblmod(7) , Tblmod(6))
+            Iload = Regmdb / 100
+            Regmdb = Makeint(tblmod(9) , Tblmod(8))
+            Pwrload = Regmdb / 100
+            Regmdb = Makeint(tblmod(11) , Tblmod(10))
+            Pwroutload = Regmdb / 100
+            Regmdb = Makeint(tblmod(13) , Tblmod(12))
+            Tempbat = Regmdb / 100
+            Regmdb = Makeint(tblmod(15) , Tblmod(14))
+            Tempcase = Regmdb / 100
+            Regmdb = Makeint(tblmod(17) , Tblmod(16))
+            Tempcomp = Regmdb / 100
+            Regmdb = Makeint(tblmod(19) , Tblmod(18))
+            Batsoc = Regmdb / 100
+            If Enabug.3 = 1 Then
+               Print #1 , "Vload=" ; Fusing(vload , "#.##")
+               Print #1 , "Iload=" ; Fusing(iload , "#.##")
+               Print #1 , "Pwrload=" ; Fusing(pwrload , "#.##")
+               Print #1 , "Pwrout=" ; Fusing(pwroutload , "#.##")
+               Print #1 , "Tempbat=" ; Fusing(tempbat , "#.##")
+               Print #1 , "Tempcase=" ; Fusing(tempcase , "#.##")
+               Print #1 , "Tempcomp=" ; Fusing(tempcomp , "#.##")
+               Print #1 , "Batsoc=" ; Fusing(batsoc , "#.##")
+            End If
          End If
       Else
          If Ptrmod = 7 Then
@@ -736,24 +743,6 @@ Sub Procser()
             Call Leeidserial()
             Atsnd = "ID ser <" + Idserial + ">"
 
-         Case "SETDIR"
-            If Numpar = 2 Then
-               Cmderr = 0
-               Tmpb = Val(cmdsplit(2))
-               If Tmpb > 0 And Tmpb < 255 Then
-                  Idslave = Tmpb
-                  Idslaveeep = Idslave
-                  Atsnd = "Se configuro IDslave a " + Str(idslave)
-               Else
-                  Cmderr = 5
-               End If
-            Else
-               Cmderr = 4
-            End If
-
-         Case "LEEDIR"
-            Cmderr = 0
-            Atsnd = "IDslave =" + Str(idslave)
 
 
          Case Else

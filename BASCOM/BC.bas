@@ -15,8 +15,8 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 75
-$version 0 , 0 , 81
+$projecttime = 68
+$version 0 , 0 , 64
 
 
 $lib "modbus.lbx"
@@ -24,8 +24,9 @@ $lib "modbus.lbx"
 'Declaracion de constantes
 Const Numtxaut = 4
 Const Numtxaut_mas_uno = Numtxaut + 1
-Const Addr0 = &H1000
-Const Addr1 = &H1046
+Const Addr0 = &H3100
+Const Addr1 = &H310C
+
 
 
 'Configuracion de entradas/salidas
@@ -52,7 +53,7 @@ Open "com1:" For Binary As #1
 On Urxc At_ser1
 Enable Urxc
 
-Config Com2 = 19200 , Synchrone = 0 , Parity = None , Stopbits = 1 , Databits = 8 , Clockpol = 1
+Config Com2 = 115200 , Synchrone = 0 , Parity = None , Stopbits = 1 , Databits = 8 , Clockpol = 1
 Open "COM2:" For Binary As #4
 Dir485 Alias Portb.2
 'Config Print3 = Dir485 , Mode = Set
@@ -67,7 +68,7 @@ Enable Interrupts
 '*******************************************************************************
 '* Archivos incluidos
 '*******************************************************************************
-$include "EMETER_archivos.bas"
+$include "BC_archivos.bas"
 
 
 

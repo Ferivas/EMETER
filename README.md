@@ -18,6 +18,8 @@ N,Idserial,Token,Nodo,field1,field2,field3,field4,field5,field6,field7,field8,D<
 ## CONFIGURACION DE LISTADOIBT y LISTADOMANGO
 Es necesario correr primero el script control.py y configurar el canal de listado de ibt porqué es utilizado por serialserver.py para validar los ID de las tramas.
 El canal de IBT debe tener una entrada con el IDserial del ATMega1284P que lee por Modbus los registros del EMETER.<br>
+Monitoreo de tempeartura del Rpi en http://iot.watching.com.ec:3000/channels/357
+
 
 
 

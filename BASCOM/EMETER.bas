@@ -15,22 +15,28 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 75
-$version 0 , 0 , 81
+$projecttime = 94
+$version 0 , 0 , 108
 
 
 $lib "modbus.lbx"
 
 'Declaracion de constantes
-Const Numtxaut = 4
+Const Numtxaut = 6
 Const Numtxaut_mas_uno = Numtxaut + 1
 Const Addr0 = &H1000
 Const Addr1 = &H1046
+Const Numregtblmod = 64
+Const Numlecmdb = 5
 
 
 'Configuracion de entradas/salidas
 Led1 Alias Portb.0                                          'LED ROJO
 Config Led1 = Output
+
+Spuerta Alias Pinb.5                                        ' Pin MOSI utilizado como entrada
+Config Spuerta = Input
+Set Portb.5
 
 
 'Configuración de Interrupciones
@@ -127,6 +133,14 @@ Do
             Case 4:
                'Print #1 , "Read MDB"
                Call Txmdb()
+
+            Case 5:
+               Print #1 , "AUT5"
+
+            Case 6:
+               Print #1 , "AUT6"                            'Variables digitales
+               Call Txauto6()
+
          End Select
       End If
    Next
@@ -134,6 +148,26 @@ Do
    If Newmod = 1 Then
       Reset Newmod
       Call Rxmdb()
+   End If
+
+   If Spuerta = 0 Then
+      If Spuerta <> Spuertaant Then
+         Waitms 10
+         If Spuerta = 0 Then
+            Print#1 , "Spuerta=" ; Spuerta
+            Spuertaant = Spuerta
+            Set Iniauto.5
+         End If
+      End If
+   Else
+      If Spuerta <> Spuertaant Then
+         Waitms 10
+         If Spuerta = 1 Then
+            Print#1 , "Spuerta=" ; Spuerta
+            Spuertaant = Spuerta
+            Set Iniauto.5
+         End If
+      End If
    End If
 
 Loop

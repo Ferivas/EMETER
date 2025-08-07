@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 153
+$projecttime = 265
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -23,7 +23,7 @@ Declare Sub Txauto1()
 Declare Sub Txauto2()
 Declare Sub Txrpi()
 Declare Sub Procrpi()
-
+Declare Sub Txauto6()
 
 '*******************************************************************************
 'Declaracion de variables
@@ -44,6 +44,7 @@ Dim Idslaveeep As Eram Byte
 Dim Tmpcrc32 As Long
 Dim Trytx As Byte
 Dim Txok As Bit
+Dim Spuertaant As Bit
 
 Dim Tmps As Single
 Dim Bs1 As Byte At Tmps Overlay
@@ -85,25 +86,30 @@ Dim Lsbmdb As Byte
 Dim W As Word
 Dim Regmdb As Word
 Dim Cntrm As Word
+Dim Ptrmdb As Byte
 
-'Variables panel 3100H
-Dim Vps As Single
-Dim Ips As Single
-Dim Pwrps As Single
-Dim Pwrin As Single
-Dim Vbat As Single
-Dim Ibatch As Single
-Dim Pwrbch As Single
-Dim Pwrout As Single
-'Variables panel 310CH
-Dim Vload As Single
-Dim Iload As Single
-Dim Pwrload As Single
-Dim Pwroutload As Single
-Dim Tempbat As Single
-Dim Tempcase As Single
-Dim Tempcomp As Single
-Dim Batsoc As Single
+'Variables Modbus
+Dim Va As Word
+Dim Vb As Word
+Dim Vc As Word
+Dim Freq As Single
+Dim I3s As Single
+Dim Ia As Single
+Dim Ib As Single
+Dim Ic As Single
+
+Dim Pwr3s As Single
+Dim Pwra As Single
+Dim Pwrb As Single
+Dim Pwrc As Single
+
+Dim Ea3s As Dword
+Dim Ea As Dword
+Dim Eb As Dword
+Dim Ec As Dword
+
+Dim Cntrini As Word
+Dim Cntrinieep As Eram Word
 
 'Variables TIMER0
 Dim T0c As Byte
@@ -137,7 +143,7 @@ Dim Rpidata As String * 140 , Rpiproc As String * 140
 'Variables SERIAL1
 Dim Serrx2 As Byte
 Dim Inicntrm As Bit
-Dim Tblmod(48) As Byte
+Dim Tblmod(numregtblmod) As Byte
 
 '*******************************************************************************
 '* END public part                                                             *
@@ -294,6 +300,10 @@ Sub Inivar()
 
    Idslave = Idslaveeep
    Print #1 , "IDSlave>" ; Idslave
+   Cntrini = Cntrinieep
+   Cntrini = Cntrini + 1
+   Cntrinieep = Cntrini
+   Print #1 , "CNTRini=" ; Cntrini
 
 End Sub
 
@@ -339,30 +349,30 @@ End Sub
       Tmpl = Tmpl + 60
    Next
 
+   Idslaveeep = 1
+   Autovaleep(4) = 10
+
  End Sub
 
 '*******************************************************************************
 ' VALORES POR DEFAULT
 '*******************************************************************************
 Sub Txmdb()
-   Incr Tmpb3
-   If Tmpb3.0 = 0 Then
-      Addrmdb = Addr0
-   Else
-      Addrmdb = Addr1
-   End If
-
-   For J = 1 To 48
+   Incr Ptrmdb
+   Ptrmdb = Ptrmdb Mod Numlecmdb
+   Addrmdb = Lookup(ptrmdb , Tbl_ptrmdb)
+   Print #1 , "Ptr=" ; Ptrmdb ; ", Addr=" ; Hex(addrmdb)
+   For J = 1 To Numregtblmod
       Tblmod(j) = 0
    Next
    Ptrmod = 0
    If Enabug.3 = 1 Then
       Print #1 , "TX " ; Hex(addrmdb)
-      Print #1 , Makemodbus(idslave , 3 , Addrmdb , 16)
+      Print #1 , Makemodbus(idslave , 3 , Addrmdb , 36)
    End If
    Set Inicntrm
    Set Dir485
-   Print #4 , Makemodbus(idslave , 3 , Addrmdb , 16);
+   Print #4 , Makemodbus(idslave , 3 , Addrmdb , 36);
    Waitus 1500
    Reset Dir485
 '   Set Inicntrm
@@ -373,7 +383,7 @@ End Sub
 
 Sub Rxmdb()
    If Enabug.3 = 1 Then
-      Print #1 , "PTRMDB=" ; Ptrmod
+      Print #1 , "PTRMDB=" ; Ptrmod ; ", Addr=" ; Hex(addrmdb)
       For J = 1 To Ptrmod                                   'La respuesta es la direccion del esclavo,la funcion que se recibio, el numero de bytes
          Print #1 , Hex(tblmod(j)) ; ",";                   ' que se envian, los bytes que se reciben (12 en este caso) y 2 bytes de CHCKSUM
       Next                                                  ' ADDR(1) + FUNCION(1) + NUMbytes (12)+ DATOS(12) + CHCKSUM(2) = 1+1+1+12+2 = 17 bytes que se reciben
@@ -387,41 +397,137 @@ Sub Rxmdb()
    Tmpw = Makeint(tblmod(msbmdb) , Tblmod(lsbmdb))
    If W = Tmpw Then
       If Rdnormal = 1 Then
-         If Addrmdb = Addr0 Then
-            Bdw4 = Tblmod(4)
-            Bdw3 = Tblmod(5)
-            Bdw2 = Tblmod(6)
-            Bdw1 = Tblmod(7)
-            Print #1 , "V3fs=" ; Tmpdw
+         Select Case Ptrmdb:
+            Case 0:                                         '1000H
+               Bdw4 = Tblmod(4)
+               Bdw3 = Tblmod(5)
+               Bdw2 = Tblmod(6)
+               Bdw1 = Tblmod(7)
+               'Va = Tmpdw
+               Print #1 , "V3fs=" ; Tmpdw
 
-            Bdw4 = Tblmod(8)
-            Bdw3 = Tblmod(9)
-            Bdw2 = Tblmod(10)
-            Bdw1 = Tblmod(11)
-            Print #1 , "Vl1n=" ; Tmpdw
+               Bdw4 = Tblmod(8)
+               Bdw3 = Tblmod(9)
+               Bdw2 = Tblmod(10)
+               Bdw1 = Tblmod(11)
+               Va = Tmpdw
+               Print #1 , "Va=" ; Va
 
-            Bdw4 = Tblmod(12)
-            Bdw3 = Tblmod(13)
-            Bdw2 = Tblmod(14)
-            Bdw1 = Tblmod(15)
-            Print #1 , "Vl2n=" ; Tmpdw
+               Bdw4 = Tblmod(12)
+               Bdw3 = Tblmod(13)
+               Bdw2 = Tblmod(14)
+               Bdw1 = Tblmod(15)
+               Vb = Tmpdw
+               Print #1 , "Vb=" ; Vb
+
+               Bdw4 = Tblmod(16)
+               Bdw3 = Tblmod(17)
+               Bdw2 = Tblmod(18)
+               Bdw1 = Tblmod(19)
+               Vc = Tmpdw
+               Print #1 , "Vc=" ; Vc
+
+            Case 1:                                         '100EH
+               Bdw4 = Tblmod(4)
+               Bdw3 = Tblmod(5)
+               Bdw2 = Tblmod(6)
+               Bdw1 = Tblmod(7)
+               I3s = Tmpdw / 1000
+               Print #1 , "I3s=" ; I3s
+
+               Bdw4 = Tblmod(8)
+               Bdw3 = Tblmod(9)
+               Bdw2 = Tblmod(10)
+               Bdw1 = Tblmod(11)
+               Ia = Tmpdw / 1000
+               Print #1 , "Ia=" ; Ia
+
+               Bdw4 = Tblmod(12)
+               Bdw3 = Tblmod(13)
+               Bdw2 = Tblmod(14)
+               Bdw1 = Tblmod(15)
+               Ib = Tmpdw / 1000
+               Print #1 , "Ib=" ; Ib
+
+               Bdw4 = Tblmod(16)
+               Bdw3 = Tblmod(17)
+               Bdw2 = Tblmod(18)
+               Bdw1 = Tblmod(19)
+               Ic = Tmpdw / 1000
+               Print #1 , "Ic=" ; Ic
+
+            Case 2:                                         '102EH
+               Bs4 = Tblmod(4)
+               Bs3 = Tblmod(5)
+               Bs2 = Tblmod(6)
+               Bs1 = Tblmod(7)
+               Pwr3s = Tmps
+               Print #1 , "PWR3s=" ; Pwr3s
+
+               Bs4 = Tblmod(8)
+               Bs3 = Tblmod(9)
+               Bs2 = Tblmod(10)
+               Bs1 = Tblmod(11)
+               Pwra = Tmpdw
+               Print #1 , "Pwra=" ; Pwra
+
+               Bs4 = Tblmod(12)
+               Bs3 = Tblmod(13)
+               Bs2 = Tblmod(14)
+               Bs1 = Tblmod(15)
+               Pwrb = Tmpdw
+               Print #1 , "Pwrb=" ; Pwrb
+
+               Bs4 = Tblmod(16)
+               Bs3 = Tblmod(17)
+               Bs2 = Tblmod(18)
+               Bs1 = Tblmod(19)
+               Pwrc = Tmpdw
+               Print #1 , "Pwrc=" ; Pwrc
+
+            Case 3:                                         '1070
+
+               Bdw4 = Tblmod(4)
+               Bdw3 = Tblmod(5)
+               Bdw2 = Tblmod(6)
+               Bdw1 = Tblmod(7)
+               Ea3s = Tmpdw
+               Print #1 , "Ea3s=" ; Ea3s
+
+               Bdw4 = Tblmod(12)
+               Bdw3 = Tblmod(13)
+               Bdw2 = Tblmod(14)
+               Bdw1 = Tblmod(15)
+               Ea = Tmpdw
+               Print #1 , "Ea=" ; Ea
+
+               Bdw4 = Tblmod(16)
+               Bdw3 = Tblmod(17)
+               Bdw2 = Tblmod(18)
+               Bdw1 = Tblmod(19)
+               Eb = Tmpdw
+               Print #1 , "Eb=" ; Eb
+
+               Bdw4 = Tblmod(20)
+               Bdw3 = Tblmod(21)
+               Bdw2 = Tblmod(22)
+               Bdw1 = Tblmod(23)
+               Ec = Tmpdw
+               Print #1 , "Pwrc=" ; Ec
 
 
-            Bdw4 = Tblmod(16)
-            Bdw3 = Tblmod(17)
-            Bdw2 = Tblmod(18)
-            Bdw1 = Tblmod(19)
-            Print #1 , "Vl3n=" ; Tmpdw
+            Case 4:                                         '1046H
+               Bdw4 = Tblmod(4)
+               Bdw3 = Tblmod(5)
+               Bdw2 = Tblmod(6)
+               Bdw1 = Tblmod(7)
+               Freq = Tmpdw / 1000
+               Print #1 , "frec=" ; Freq
 
-         End If
-         If Addrmdb = Addr1 Then
-            Bdw4 = Tblmod(4)
-            Bdw3 = Tblmod(5)
-            Bdw2 = Tblmod(6)
-            Bdw1 = Tblmod(7)
-            Print #1 , "frec=" ; Tmpdw
+            Case Else:
+               Print #1 , "Ptr no val"
 
-         End If
+         End Select
       Else
          If Ptrmod = 7 Then
             Regmdb = Makeint(tblmod(5) , Tblmod(4))
@@ -478,12 +584,11 @@ Sub Txrpi()
 End Sub
 
 Sub Txauto1()
-   Print #1 , "TXAUT3 ;" ; Time$ ; "," ; Date$
+   Print #1 , "TXAUT1 ;" ; Time$ ; "," ; Date$
    Fechaed = Date$
    Horaed = Time$
-   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-3"
-   Atsnd = Atsnd + "," + Fusing(vps , "#.##") + "," + Fusing(ips , "#.##") + "," + Fusing(pwrps , "#.##") + "," + Fusing(pwrin , "#.##")
-   Atsnd = Atsnd + "," + Fusing(vbat , "#.##") + "," + Fusing(ibatch , "#.##") + "," + Fusing(pwrbch , "#.##") + "," + Fusing(pwrout , "#.##")
+   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-1"
+   Atsnd = Atsnd + "," + Str(va) + "," + Str(vb) + "," + Str(vc) + "," + Str(freq) + "," + Str(ia) + "," + Str(ib) + "," + Str(ic) + ","
    Tmpw = Len(atsnd)
    Tmpcrc32 = Crc32(atsnd , Tmpw)
    Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
@@ -496,15 +601,30 @@ Sub Txauto2()
    Print #1 , "TXAUT4 ;" ; Time$ ; "," ; Date$
    Fechaed = Date$
    Horaed = Time$
-   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-4"
-   Atsnd = Atsnd + "," + Fusing(vload , "#.##") + "," + Fusing(iload , "#.##") + "," + Fusing(pwrload , "#.##") + "," + Fusing(pwroutload , "#.##")
-   Atsnd = Atsnd + "," + Fusing(tempbat , "#.##") + "," + Fusing(tempcase , "#.##") + "," + Fusing(tempcomp , "#.##") + "," + Fusing(batsoc , "#.##")
+   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-2"
+   Atsnd = Atsnd + "," + Fusing(pwr3s , "#.##") + "," + Fusing(pwra , "#.##") + "," + Fusing(pwrb , "#.##") + "," + Fusing(pwrc , "#.##")
+   Atsnd = Atsnd + "," + Str(ea3s) + "," + Str(ea) + "," + Str(eb) + "," + Str(ec)
    Tmpw = Len(atsnd)
    Tmpcrc32 = Crc32(atsnd , Tmpw)
    Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
    Print #1 , "$" ; Atsnd
    'Print #2 , "$" ; Atsnd
    Call Txrpi()
+End Sub
+
+Sub Txauto6()
+   Print #1 , "TXAUT6 ;" ; Time$ ; "," ; Date$
+   Fechaed = Date$
+   Horaed = Time$
+   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-6"
+   Atsnd = Atsnd + "," + Str(spuerta) + "," + Str(cntrini) + ",,,,,,"
+   Tmpw = Len(atsnd)
+   Tmpcrc32 = Crc32(atsnd , Tmpw)
+   Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
+   Print #1 , "$" ; Atsnd
+   'Print #2 , "$" ; Atsnd
+   Call Txrpi()
+
 End Sub
 
 
@@ -806,6 +926,13 @@ End Sub
 '*******************************************************************************
 'TABLA DE DATOS
 '*******************************************************************************
+Tbl_ptrmdb:
+Data &H1000%                                                'Voltaje
+Data &H100E%                                                'Corriente
+Data &H102E%                                                'PWR Activa
+Data &H1070%                                                'PWR Reactiva
+Data &H1046%                                                'Energia + Frecuencia
+
 
 Tbl_err:
 Data "OK"                                                   '0

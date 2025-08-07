@@ -1,7 +1,11 @@
 # EMETER
-Medidor de Energía con interfaz Modbus.<br>
-Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)).
-Este medidor trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcntrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta y también puede activar/desactivar un relé que se utiliza para energizar un módem LTE de Mikrotik el cual se encarga de proporcionar conectividad de Internet al equipo.
+Equipo para leer los valores de un Medidor de Energía con interfaz Modbus y enviar estos datos a una plataforma de monitoreo basado en Thingsboard.<br>
+Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)). El EM400 trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcntrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta y también puede activar/desactivar un relé que se utiliza para energizar un módem LTE de Mikrotik el cual se encarga de proporcionar conectividad de Internet al equipo.
+
+## REGISTROS MODBUS
+Los registros Modbus están descritos a partir de la página 5 en el siguiente documento:
+
+https://github.com/Ferivas/EMETER/blob/main/DOCS/Emeter_Modbus-1.pdf
 
 ## CONFIGURACION MODULO DE COMUNICACIONES BASADO EN DITEC-RPI
 ### control.json

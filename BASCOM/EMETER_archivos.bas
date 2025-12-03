@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 265
+$projecttime = 266
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -874,6 +874,21 @@ Sub Procser()
          Case "LEEDIR"
             Cmderr = 0
             Atsnd = "IDslave =" + Str(idslave)
+
+         Case "SETREL"
+            If Numpar = 2 Then
+               Cmderr = 0
+               Tmpb = Val(cmdsplit(2))
+               If Tmpb = 0  THEN
+                  Atsnd = "RESET rele"
+                  Reset Rele
+               Else
+                  Atsnd = "SET rele"
+                  Set Rele
+               End If
+            Else
+               Cmderr = 4
+            End If
 
 
          Case Else

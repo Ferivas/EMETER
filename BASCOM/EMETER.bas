@@ -15,8 +15,8 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 94
-$version 0 , 0 , 108
+$projecttime = 96
+$version 0 , 0 , 110
 
 
 $lib "modbus.lbx"
@@ -38,6 +38,10 @@ Spuerta Alias Pinb.5                                        ' Pin MOSI utilizado
 Config Spuerta = Input
 Set Portb.5
 
+
+Rele Alias Portb.7
+Config Rele = Output
+Reset Rele
 
 'Configuración de Interrupciones
 'TIMER0

@@ -45,8 +45,12 @@ PIN_MONITOREADO=dataconfig.get('pinmonitor')
 
 print("pinmon>",PIN_MONITOREADO)
 
+newestado=False
+
 def callback(pin):
+    global newestado
     print("Cambio detectado:", GPIO.input(pin))
+    newestado=True
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN_MONITOREADO, GPIO.IN)
@@ -55,9 +59,26 @@ GPIO.add_event_detect(PIN_MONITOREADO, GPIO.BOTH, callback=callback, bouncetime=
 
 print("Monitoreando pin con interrupciones. CTRL+C para salir.")
 
+txvinok=False
+txvinfalla=False
 try:
     while True:
         time.sleep(1)
+        if newestado:
+            newestado=False
+            estado=GPIO.input(PIN_MONITOREADO)
+            if estado:
+                if not txvinok:
+                    print("Tx Vin OK")
+                    txvinok=True
+                    txvinfalla=False
+            else:
+                if not txvinfalla:
+                    print("Tx Vin Falla")
+                    txvinfalla=True
+                    txvinok=True
+            
+
 except KeyboardInterrupt:
     pass
 finally:

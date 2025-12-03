@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor de energia principal utilizando pin Raspberry
+After=multi-user.target
+
+[Service]
+Type=idle
+Restart=always
+
+WorkingDirectory=/home/pi/EMETER/PYTHON
+ExecStart=/usr/bin/python3 /home/pi/EMETER/PYTHON/vinmonitor.py &
+
+[Install]
+WantedBy=multi-user.target

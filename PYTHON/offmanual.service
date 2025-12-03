@@ -1,0 +1,14 @@
+[Unit]
+Description=Shutdown por Pulsante en GPIO23
+After=multi-user.target
+
+[Service]
+Type=idle
+Restart=on-failure
+
+WorkingDirectory=/home/pi/EMETER/PYTHON
+ExecStart=/usr/bin/python3 /home/pi/EMETER/PYTHON/offmanual.py &
+
+[Install]
+WantedBy=multi-user.target
+

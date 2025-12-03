@@ -13,11 +13,12 @@ configura las variables de la siguiente manera
 import RPi.GPIO as GPIO
 import time
 import json
+import requests
 
 # led_sta=18
 # pinoff=3
 
-FILECONFIG="listen_offrpi.json"
+FILECONFIG="vinmonitor.json"
 print("Comprueba configuracion hw inicial")
 
 confighw=False
@@ -27,7 +28,7 @@ try:
     confighw=True
 except:
     print("Configuracion default")
-    configdefault={'pinmonitor':18}
+    configdefault={'pinmonitor':18,"chatid":"CHATID","tokentgram":"TOKEN"}
     with open(FILECONFIG, 'w') as fp:
         json.dump(configdefault, fp)
 
@@ -41,7 +42,22 @@ print(dataconfig)
 
 
 PIN_MONITOREADO=dataconfig.get('pinmonitor')
+CHATID=dataconfig.get("chatid")
+BOTID=dataconfig.get("tokentgram")
 
+
+def sndmsgtelegram(msg,chatid,botid):
+    urlbase="https://api.telegram.org"
+    url=urlbase+'/bot'+botid+'/sendMessage?chat_id='+chatid+'&disable_web_page_preview=1&parse_mode=Markdown&text='+msg
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            results = response.json()
+            print(results)
+        else:
+            print("Error code %s" % response.status_code)
+    except:
+        print("Error snd Telegram")  
 
 print("pinmon>",PIN_MONITOREADO)
 
@@ -70,11 +86,15 @@ try:
             if estado:
                 if not txvinok:
                     print("Tx Vin OK")
+                    msg="Se reestablecio voltaje de alimentacion principal en EMETER"
+                    sndmsgtelegram(msg,CHATID,BOTID)                    
                     txvinok=True
                     txvinfalla=False
             else:
                 if not txvinfalla:
                     print("Tx Vin Falla")
+                    msg="FALLA en voltaje de alimentacion principal en EMETER"
+                    sndmsgtelegram(msg,CHATID,BOTID)                    
                     txvinfalla=True
                     txvinok=True
             

@@ -96,7 +96,7 @@ try:
                     msg="FALLA en voltaje de alimentacion principal en EMETER"
                     sndmsgtelegram(msg,CHATID,BOTID)                    
                     txvinfalla=True
-                    txvinok=True
+                    txvinok=False
             
 
 except KeyboardInterrupt:

@@ -17,14 +17,14 @@ Este equipo mide las variables y parametros eléctricos que entrega un medidor d
 Este conversor permite disminuir el voltaje de entrada de 24VDC a 12VDC para utilizar este voltaje a la entrada del mini UPS que se carga con este voltaje.
 El voltaje de entrada de 24V utiliza una bornera verde de 2 pines
 
- <img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Conversorentrada.jpg">
+ <img width="1000" alt="ConversorDCDC" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Conversorentrada.jpg">
 
  ### MINI UPS
  Este miniUPS de corriente continua incluye un cargador de batería interno y 2 pilas de Litio con una cpacidad de 2000mAh /14.8Wh. Se carga a 12VDC con un ca corriente máxima de 2A y tiene tres salidas de voltaje:<br>
  * 5V
  * 9V
  * 12V
-<img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/miniUPS.jpg">
+<img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/MiniUPS.jpg">
 
 ### RASPBERRY PI 4
 Es el encargado de manejar las comunicaciones, permitiendo enviar los datos a un plataforma de monitoreo de IOT (Thingsboard). También se puede reprogramar el firmware de la tarjeta de interfaz Modbus.
@@ -33,7 +33,7 @@ Es el encargado de manejar las comunicaciones, permitiendo enviar los datos a un
 ### TARJETA DE MONITOREO DEL RASPBERRY
 Esta tarjeta se encarga de mantener operativo al Raspberry monitoreando el voltaje de alimentación del miniUPS. En caso de una falla de energía se activa un temporizador que mantiene encendido al Raspberry Pi 4 por un tiempo máximo de 1800 segndos (media hora) en caso de que no exista alimentación principal(no se detecta voltaje de carga en el miniUPS). Si se supera este tiempo se activa una señal para apagar de forma segura el Raspberry. El Raspberry se encuentra corriendo continuamente un script que decta el cambio de estado del GPIO3 de manera de realizar un apagado seguro (shutdown) si este pin se pone en bajo por más de seis segundos. En caso de que la limentación principal se reestablezca antes de la media hora el Raspberry continúa operando normalmente. <br>
 Si el Raspberry se apaga, la tarjeta de monitoreo permanece en bajo consumo de potencia esperando que se reestablezca la alimentación principal. Cuando se detecta de nuevo la alimentación principal, la tarjeta espera 2 minutos antes de encender automáticamnete el Raspberry por medio de un pulso de 1 segundo en el GPIO3. De esta manera se garantiza que no se produzcan apagados por falta de energía que pueden corromper la memoria SD que guarda el sistema operativo del Raspberry.<br>
- <img width="600" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Rpi4.jpg"> 
+ <img width="600" alt="Monitoreo" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/TarjetaMonitoreo.jpg"> 
  
 En caso de necesitar apagar inmediatamente el Raspberry, como por ejemplo transportar el equipo, se puede utilizar un botón manual (que se muestra en la figura siguiente) y que apaga al Raspberry sesi se mantiene presioando por más de seis segundos. Luego de comprobar que el Rpi se apaga es necesario desconectar el conector USB del miniUPS que proporciona los 5V para evitar que la tarjeta de monitoreo vuelva a encender automáticamente al Rpi.<br>
 La tarjeta de monitoreo incluye dos leds de señalizacion marcados como LED3 (color rojo) y LED4 (color verde) que permiten determinar el estado de la tarjeta de monitoreo y el Rpi. Estos estados y su señalización es la siguiente:<br>

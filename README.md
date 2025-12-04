@@ -1,6 +1,51 @@
 # EMETER
 Equipo para leer los valores de un Medidor de Energía con interfaz Modbus y enviar estos datos a una plataforma de monitoreo basado en Thingsboard.<br>
-Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)). El EM400 trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcntrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta y también puede activar/desactivar un relé que se utiliza para energizar un módem LTE de Mikrotik el cual se encarga de proporcionar conectividad de Internet al equipo.
+Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)). El EM400 trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcntrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta.
+
+## COMPONENTES
+* Conversor DC-DC de entrada (24V de entrada a 12V de entrada)
+* Mini UPS
+* Raspberry Pi 4
+* Tarjeta de monitoreo Raspberry
+* Tarjeta interfaz Raspberry Modbus
+* Conversor DC-DC elevador (9V entrada a 24V de salida) para energizar el Emeter
+* Router LTE
+
+ <img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Componentes.jpg">
+  
+### CONVERSOR DC-DC DE ENTRADA
+Este conversor permite disminuir el voltaje de entrada de 24VDC a 12VDC para utilizar este voltaje a la entrada del mini UPS que se carga con este voltaje.
+El voltaje de entrada de 24V utiliza una bornera verde de 2 pines
+
+ <img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Conversorentrada.jpg">
+
+ ### MINI UPS
+ Este miniUPS de corriente continua incluye un cargador de batería interno y 2 pilas de Litio con una cpacidad de 2000mAh /14.8Wh. Se carga a 12VDC con un ca corriente máxima de 2A y tiene tres salidas de voltaje:<br>
+ * 5V
+ * 9V
+ * 12V
+<img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/miniUPS.jpg">
+
+### RASPBERRY PI 4
+Es el encargado de manejar las comunicaciones, permitiendo enviar los datos a un plataforma de monitoreo de IOT (Thingsboard). También se puede reprogramar el firmware de la tarjeta de interfaz Modbus.
+<img width="600" alt="Raspberry" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Rpi4.jpg">
+
+### TARJETA DE MONITOREO DEL RASPBERRY
+Esta tarjeta se encarga de mantener operativo al Raspberry monitoreando el voltaje de alimentación del miniUPS. En caso de una falla de energía se activa un temporizador que mantiene encendido al Raspberry Pi 4 por un tiempo máximo de 1800 segndos (media hora) en caso de que no exista alimentación principal(no se detecta voltaje de carga en el miniUPS). Si se supera este tiempo se activa una señal para apagar de forma segura el Raspberry. El Raspberry se encuentra corriendo continuamente un script que decta el cambio de estado del GPIO3 de manera de realizar un apagado seguro (shutdown) si este pin se pone en bajo por más de seis segundos. En caso de que la limentación principal se reestablezca antes de la media hora el Raspberry continúa operando normalmente. <br>
+Si el Raspberry se apaga, la tarjeta de monitoreo permanece en bajo consumo de potencia esperando que se reestablezca la alimentación principal. Cuando se detecta de nuevo la alimentación principal, la tarjeta espera 2 minutos antes de encender automáticamnete el Raspberry por medio de un pulso de 1 segundo en el GPIO3. De esta manera se garantiza que no se produzcan apagados por falta de energía que pueden corromper la memoria SD que guarda el sistema operativo del Raspberry.<br>
+ <img width="600" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Rpi4.jpg"> 
+ 
+En caso de necesitar apagar inmediatamente el Raspberry, como por ejemplo transportar el equipo, se puede utilizar un botón manual (que se muestra en la figura siguiente) y que apaga al Raspberry sesi se mantiene presioando por más de seis segundos. Luego de comprobar que el Rpi se apaga es necesario desconectar el conector USB del miniUPS que proporciona los 5V para evitar que la tarjeta de monitoreo vuelva a encender automáticamente al Rpi.<br>
+La tarjeta de monitoreo incluye dos leds de señalizacion marcados como LED3 (color rojo) y LED4 (color verde) que permiten determinar el estado de la tarjeta de monitoreo y el Rpi. Estos estados y su señalización es la siguiente:<br>
+* Con energía principal y Rpi encendido el LED4 (verde) parpadea una vez cada segundo.
+* Sin energía principal y RPI encendido el LED4 (verde) parpadea dos veces cada segundo.
+* Sin energía principal y Rpi apagado, el LED3 (rojo) parpadea dos veces cada segundo.
+* Con energía principal y Rpi apagado, el LED# (rojo) parpadea una vez cada segundo.
+<img width="600" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Leds_se%C3%B1alizacion_monitoreo_Rpi.jpg"> 
+
+
+
+
 
 ## REGISTROS MODBUS
 Los registros Modbus están descritos a partir de la página 5 en el siguiente documento:

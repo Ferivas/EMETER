@@ -1,6 +1,6 @@
 # EMETER
 Equipo para leer los valores de un Medidor de Energía con interfaz Modbus y enviar estos datos a una plataforma de monitoreo basado en Thingsboard.<br>
-Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)). El EM400 trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcntrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta.
+Este equipo mide las variables y parametros eléctricos que entrega un medidor de energía de ABB (ABB Power EM400 EM400-T (5A)). El EM400 trabaja como un esclavo modbus y permite acceder a sus registros configurando el puerto serial a una velocidad de 19200bps (8,N,1). Para leer los registros Modbus del EM400 se utiliza un microcontrolador AVR (ATMega1284P) el cual esta programado para trabajar como un master Modbus consultando periodicamente los registros Modbus que se consideran de interés. Adicionalmente este microcontrolador también monitorea el estado de una entrada digital que puede ser utilizada como sensor de puerta.
 
 ## COMPONENTES
 * Conversor DC-DC de entrada (24V de entrada a 12V de entrada)
@@ -10,6 +10,7 @@ Este equipo mide las variables y parametros eléctricos que entrega un medidor d
 * Tarjeta interfaz Raspberry Modbus
 * Conversor DC-DC elevador (9V entrada a 24V de salida) para energizar el Emeter
 * Router LTE
+* Rele Wifi
 
  <img width="1000" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Componentes.jpg">
   
@@ -36,15 +37,38 @@ Si el Raspberry se apaga, la tarjeta de monitoreo permanece en bajo consumo de p
  <img width="600" alt="Monitoreo" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/TarjetaMonitoreo.jpg"> 
  
 En caso de necesitar apagar inmediatamente el Raspberry, como por ejemplo transportar el equipo, se puede utilizar un botón manual (que se muestra en la figura siguiente) y que apaga al Raspberry sesi se mantiene presioando por más de seis segundos. Luego de comprobar que el Rpi se apaga es necesario desconectar el conector USB del miniUPS que proporciona los 5V para evitar que la tarjeta de monitoreo vuelva a encender automáticamente al Rpi.<br>
+<img width="600" alt="Apagado manual" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Boton_offmanual.jpg">
+
 La tarjeta de monitoreo incluye dos leds de señalizacion marcados como LED3 (color rojo) y LED4 (color verde) que permiten determinar el estado de la tarjeta de monitoreo y el Rpi. Estos estados y su señalización es la siguiente:<br>
 * Con energía principal y Rpi encendido el LED4 (verde) parpadea una vez cada segundo.
 * Sin energía principal y RPI encendido el LED4 (verde) parpadea dos veces cada segundo.
 * Sin energía principal y Rpi apagado, el LED3 (rojo) parpadea dos veces cada segundo.
 * Con energía principal y Rpi apagado, el LED# (rojo) parpadea una vez cada segundo.
-<img width="600" alt="Componentes" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Leds_se%C3%B1alizacion_monitoreo_Rpi.jpg"> 
+<img width="600" alt="Señalizacion Monitoreo" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Leds_se%C3%B1alizacion_monitoreo_Rpi.jpg">
+
+### TARJETA INTERFAZ RASPBERRY MODBUS
+Esta tarjeta se encarga de leer los registros Modbus del Emeter ABB. La tarjeta actúa como maestro en el bus Modbus y consulta periodicamente al Emeter el cual esta configurado como esclavo.<br>
+Esta tarjeta también monitorea una entrada digital en donde se va a conectar un sensor mágnetico de puerta.
+<img width="600" alt="Interfaz Modbus" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Conexi%C3%B3n_Modbus.jpg">
+
+La señal del bus Modbus (B,A y S ) se conectan en los terminales respectivos del Emeter como se muestra en la figura.
+<img width="600" alt="Conexion Modbus" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Conexi%C3%B3n_Modbus_Emeter.jpg">
+
+Esta tarjeta consulta los registros erqueridos al Emeter y envía la información obtenida al Raspberry por medio del puerto serial. Para este fin se utiliza un conector de 3 pines con los cables cruzados como se muestra en la figura.
+<img width="600" alt="Conector interfaz" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/Cable_cruzado_Rpi_modbus.jpg">
+<img width="600" alt="Conexión interfaz" src="https://github.com/Ferivas/EMETER/blob/main/DOCS/ConexionRpiInterfaz.jpg">
 
 
+Se tiene tres leds de señalización en esta tarjeta. Dos de ellos (LED2 y LED3) muestran la transmisión y recepción de datos en el bus modbus. El LED3 parpadea cuando el maestro envia datos al escalvo y el LED2 parpadea cuando se recibe una respuesta del esclavo. El LED2 (led blanco) señaliza si existe comunicación entre la tarjeta y el Raspberry. Si no se ha establecido comunicaicón este led parpadea 2 veces cada segundo, mientras que si la comunicación es normal el led parpadea una vez por segundo.
 
+### CONVERSOR DC-DC ELEVADOR
+Para asegurar el respaldo de energía de la alimentación del emter se utiliza la salida de 9VDC del miniUPS para que el conversor elevador suba este voltaje hasta 24VDC.
+
+### ROUTER LTE
+Para poder utilizar internet para las comunicaciones se utiliza un router LTE marca Cudy. Este genera una red Wifi donde se conecta el Raspberry Pi para enviar los datos a la plataforma de monitoreo
+
+### RELE WIFI
+Para monitorear que nos inhiba el router LTE se utiliza un rele para reiniciar el modem en caso de que se pierdan las comunicaciones con el proveedor de datos celular. La condición es que se pierdan comunicaciones por más de 20 minutos, en cuyo caso se apaga el relé por cinco segundo y luego se lo vuelve a encender. El router se energiza a tráves de la salida de 12VDC del miniUPPS y por los contactos normalmente cerrados de un relé que se utiliza para apagar/encender el router para reiniciarlo.
 
 
 ## REGISTROS MODBUS

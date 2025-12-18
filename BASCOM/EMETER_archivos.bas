@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 266
+$projecttime = 317
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -23,6 +23,7 @@ Declare Sub Txauto1()
 Declare Sub Txauto2()
 Declare Sub Txrpi()
 Declare Sub Procrpi()
+Declare Sub Txauto5()
 Declare Sub Txauto6()
 
 '*******************************************************************************
@@ -103,10 +104,18 @@ Dim Pwra As Single
 Dim Pwrb As Single
 Dim Pwrc As Single
 
-Dim Ea3s As Dword
+Dim Ea3s As Single
 Dim Ea As Dword
 Dim Eb As Dword
 Dim Ec As Dword
+
+Dim Er3s As Single
+
+Dim Eag3s As Single
+Dim Eag As Single
+Dim Ebg As Single
+Dim Ecg As Single
+
 
 Dim Cntrini As Word
 Dim Cntrinieep As Eram Word
@@ -456,71 +465,84 @@ Sub Rxmdb()
                Ic = Tmpdw / 1000
                Print #1 , "Ic=" ; Ic
 
-            Case 2:                                         '102EH
-               Bs4 = Tblmod(4)
-               Bs3 = Tblmod(5)
-               Bs2 = Tblmod(6)
-               Bs1 = Tblmod(7)
-               Pwr3s = Tmps
-               Print #1 , "PWR3s=" ; Pwr3s
-
-               Bs4 = Tblmod(8)
-               Bs3 = Tblmod(9)
-               Bs2 = Tblmod(10)
-               Bs1 = Tblmod(11)
-               Pwra = Tmpdw
-               Print #1 , "Pwra=" ; Pwra
-
-               Bs4 = Tblmod(12)
-               Bs3 = Tblmod(13)
-               Bs2 = Tblmod(14)
-               Bs1 = Tblmod(15)
-               Pwrb = Tmpdw
-               Print #1 , "Pwrb=" ; Pwrb
-
-               Bs4 = Tblmod(16)
-               Bs3 = Tblmod(17)
-               Bs2 = Tblmod(18)
-               Bs1 = Tblmod(19)
-               Pwrc = Tmpdw
-               Print #1 , "Pwrc=" ; Pwrc
-
-            Case 3:                                         '1070
-
+            Case 2:                                         '10AEH  Resolucion 100 (dividir para 100?)
                Bdw4 = Tblmod(4)
                Bdw3 = Tblmod(5)
                Bdw2 = Tblmod(6)
                Bdw1 = Tblmod(7)
-               Ea3s = Tmpdw
-               Print #1 , "Ea3s=" ; Ea3s
+               Eag3s = Tmpdw / 100
+               Print #1 , "Eag3s=" ; Eag3s
+
+               Bdw4 = Tblmod(8)
+               Bdw3 = Tblmod(9)
+               Bdw2 = Tblmod(10)
+               Bdw1 = Tblmod(11)
+               Eag = Tmpdw / 100
+               Print #1 , "Eag=" ; Eag
 
                Bdw4 = Tblmod(12)
                Bdw3 = Tblmod(13)
                Bdw2 = Tblmod(14)
                Bdw1 = Tblmod(15)
-               Ea = Tmpdw
-               Print #1 , "Ea=" ; Ea
+               Ebg = Tmpdw / 100
+               Print #1 , "Ebg=" ; Ebg
 
                Bdw4 = Tblmod(16)
                Bdw3 = Tblmod(17)
                Bdw2 = Tblmod(18)
                Bdw1 = Tblmod(19)
-               Eb = Tmpdw
-               Print #1 , "Eb=" ; Eb
+               Ecg = Tmpdw / 100
+               Print #1 , "Ecg=" ; Ecg
+
+            Case 3:                                         '1070
+
+               Bs4 = Tblmod(4)
+               Bs3 = Tblmod(5)
+               Bs2 = Tblmod(6)
+               Bs1 = Tblmod(7)
+               Pwr3s = Tmps
+               Print #1 , "Pwr3s=" ; Pwr3s                  'W
+
+               Bdw4 = Tblmod(12)
+               Bdw3 = Tblmod(13)
+               Bdw2 = Tblmod(14)
+               Bdw1 = Tblmod(15)
+               Pwra = Tmpdw / 100
+               Print #1 , "Pwra=" ; Pwra                    'Wh
+
+               Bdw4 = Tblmod(16)
+               Bdw3 = Tblmod(17)
+               Bdw2 = Tblmod(18)
+               Bdw1 = Tblmod(19)
+               Pwrb = Tmpdw / 100
+               Print #1 , "Pwrb=" ; Pwrb
 
                Bdw4 = Tblmod(20)
                Bdw3 = Tblmod(21)
                Bdw2 = Tblmod(22)
                Bdw1 = Tblmod(23)
-               Ec = Tmpdw
-               Print #1 , "Pwrc=" ; Ec
+               Pwrc = Tmpdw / 100
+               Print #1 , "Pwrc=" ; Pwrc
 
 
-            Case 4:                                         '1046H
+            Case 4:                                         '103eH
                Bdw4 = Tblmod(4)
                Bdw3 = Tblmod(5)
                Bdw2 = Tblmod(6)
                Bdw1 = Tblmod(7)
+               Ea3s = Tmpdw / 100
+               Print #1 , "Ea3s=" ; Ea3s
+
+               Bdw4 = Tblmod(8)
+               Bdw3 = Tblmod(9)
+               Bdw2 = Tblmod(10)
+               Bdw1 = Tblmod(11)
+               Er3s = Tmpdw / 100
+               Print #1 , "Er3s=" ; Er3s
+               Bdw4 = Tblmod(12)
+               Bdw3 = Tblmod(13)
+               Bdw2 = Tblmod(14)
+               Bdw1 = Tblmod(15)
                Freq = Tmpdw / 1000
                Print #1 , "frec=" ; Freq
 
@@ -603,13 +625,30 @@ Sub Txauto2()
    Horaed = Time$
    Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-2"
    Atsnd = Atsnd + "," + Fusing(pwr3s , "#.##") + "," + Fusing(pwra , "#.##") + "," + Fusing(pwrb , "#.##") + "," + Fusing(pwrc , "#.##")
-   Atsnd = Atsnd + "," + Str(ea3s) + "," + Str(ea) + "," + Str(eb) + "," + Str(ec)
+   Atsnd = Atsnd + "," + Fusing(ea3s , "#.##" ) + "," + Str(ea) + "," + Str(eb) + "," + Str(ec)
    Tmpw = Len(atsnd)
    Tmpcrc32 = Crc32(atsnd , Tmpw)
    Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
    Print #1 , "$" ; Atsnd
    'Print #2 , "$" ; Atsnd
    Call Txrpi()
+End Sub
+
+
+Sub Txauto5()
+   Print #1 , "TXAUT5 ;" ; Time$ ; "," ; Date$
+   Fechaed = Date$
+   Horaed = Time$
+   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-5"
+   Atsnd = Atsnd + "," + Fusing(eag3s , "#.##") + "," + Fusing(eag , "#.##") + "," + Fusing(ebg , "#.##") + "," + Fusing(ecg , "#.##")
+   Atsnd = Atsnd + "," + Fusing(er3s , "#.##") + "," + "," + ","
+   Tmpw = Len(atsnd)
+   Tmpcrc32 = Crc32(atsnd , Tmpw)
+   Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
+   Print #1 , "$" ; Atsnd
+   'Print #2 , "$" ; Atsnd
+   Call Txrpi()
+
 End Sub
 
 Sub Txauto6()
@@ -944,9 +983,9 @@ End Sub
 Tbl_ptrmdb:
 Data &H1000%                                                'Voltaje
 Data &H100E%                                                'Corriente
-Data &H102E%                                                'PWR Activa
+Data &H10AE%                                                '3-PHASE SYS. GENERATED ACTIVE ENERGY
 Data &H1070%                                                'PWR Reactiva
-Data &H1046%                                                'Energia + Frecuencia
+Data &H103E%                                                'Energia + Frecuencia
 
 
 Tbl_err:

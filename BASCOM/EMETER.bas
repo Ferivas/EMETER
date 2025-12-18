@@ -15,8 +15,8 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 96
-$version 0 , 0 , 110
+$projecttime = 98
+$version 0 , 0 , 120
 
 
 $lib "modbus.lbx"
@@ -140,6 +140,7 @@ Do
 
             Case 5:
                Print #1 , "AUT5"
+               Call Txauto5()
 
             Case 6:
                Print #1 , "AUT6"                            'Variables digitales

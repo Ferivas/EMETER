@@ -76,6 +76,13 @@ Los registros Modbus están descritos a partir de la página 5 en el siguiente d
 
 https://github.com/Ferivas/EMETER/blob/main/DOCS/Emeter_Modbus-1.pdf
 
+## PROGRAMACION TARJETA MODBUS VIA AVRDUDE
+Es necesario ingresar de manera remota al Raspberry e ingresar al directorio /home/pi/EMETER/BASCOM y luego ejecutar este comando 
+
+avrdude -p m1284p -c arduino -P /dev/ttyUSB0 -b 57600 -F -D -U flash:w:EMETER.hex -v
+
+
+
 ## CONFIGURACION MODULO DE COMUNICACIONES BASADO EN DITEC-RPI
 ### control.json
 {"runpi": true, "procconsumos": false, "prococupa": false, "iotwtch": true}

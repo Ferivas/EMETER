@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 317
+$projecttime = 318
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -539,10 +539,10 @@ Sub Rxmdb()
                Bdw1 = Tblmod(11)
                Er3s = Tmpdw / 100
                Print #1 , "Er3s=" ; Er3s
-               Bdw4 = Tblmod(12)
-               Bdw3 = Tblmod(13)
-               Bdw2 = Tblmod(14)
-               Bdw1 = Tblmod(15)
+               Bdw4 = Tblmod(16)
+               Bdw3 = Tblmod(17)
+               Bdw2 = Tblmod(18)
+               Bdw1 = Tblmod(19)
                Freq = Tmpdw / 1000
                Print #1 , "frec=" ; Freq
 

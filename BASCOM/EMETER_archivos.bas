@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 319
+$projecttime = 326
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -494,7 +494,7 @@ Sub Rxmdb()
                Ecg = Tmpdw / 100
                Print #1 , "Ecg=" ; Ecg
 
-            Case 3:                                         '1070
+            Case 3:                                         '102e
 
                Bs4 = Tblmod(4)
                Bs3 = Tblmod(5)
@@ -503,25 +503,25 @@ Sub Rxmdb()
                Pwr3s = Tmps
                Print #1 , "Pwr3s=" ; Pwr3s                  'W
 
-               Bdw4 = Tblmod(12)
-               Bdw3 = Tblmod(13)
-               Bdw2 = Tblmod(14)
-               Bdw1 = Tblmod(15)
-               Pwra = Tmpdw / 100
+               Bs4 = Tblmod(8)
+               Bs3 = Tblmod(9)
+               Bs2 = Tblmod(10)
+               Bs1 = Tblmod(11)
+               Pwra = Tmps
                Print #1 , "Pwra=" ; Pwra                    'Wh
 
-               Bdw4 = Tblmod(16)
-               Bdw3 = Tblmod(17)
-               Bdw2 = Tblmod(18)
-               Bdw1 = Tblmod(19)
-               Pwrb = Tmpdw / 100
+               Bs4 = Tblmod(12)
+               Bs3 = Tblmod(13)
+               Bs2 = Tblmod(14)
+               Bs1 = Tblmod(15)
+               Pwrb = Tmps
                Print #1 , "Pwrb=" ; Pwrb
 
-               Bdw4 = Tblmod(20)
-               Bdw3 = Tblmod(21)
-               Bdw2 = Tblmod(22)
-               Bdw1 = Tblmod(23)
-               Pwrc = Tmpdw / 100
+               Bs4 = Tblmod(16)
+               Bs3 = Tblmod(17)
+               Bs2 = Tblmod(18)
+               Bs1 = Tblmod(19)
+               Pwrc = Tmps
                Print #1 , "Pwrc=" ; Pwrc
 
 
@@ -984,7 +984,7 @@ Tbl_ptrmdb:
 Data &H1000%                                                'Voltaje
 Data &H100E%                                                'Corriente
 Data &H10AE%                                                '3-PHASE SYS. GENERATED ACTIVE ENERGY
-Data &H1070%                                                'PWR Reactiva
+Data &H102E%                                                'PWR Activa
 Data &H103E%                                                'Energia + Frecuencia
 
 

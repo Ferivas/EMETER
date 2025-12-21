@@ -16,7 +16,7 @@ $swstack = 128
 $framesize = 128
 
 $projecttime = 98
-$version 0 , 0 , 123
+$version 0 , 0 , 125
 
 
 $lib "modbus.lbx"

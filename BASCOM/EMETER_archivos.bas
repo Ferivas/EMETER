@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 326
+$projecttime = 332
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -59,6 +59,11 @@ Dim Bdw2 As Byte At Tmpdw + 1 Overlay
 Dim Bdw3 As Byte At Tmpdw + 2 Overlay
 Dim Bdw4 As Byte At Tmpdw + 3 Overlay
 
+Dim Tmplvar As Long
+Dim Bl1 As Byte At Tmplvar Overlay
+Dim Bl2 As Byte At Tmplvar + 1 Overlay
+Dim Bl3 As Byte At Tmplvar + 2 Overlay
+Dim Bl4 As Byte At Tmplvar + 3 Overlay
 
 
 'Variables para transmisiones automáticas
@@ -496,32 +501,32 @@ Sub Rxmdb()
 
             Case 3:                                         '102e
 
-               Bs4 = Tblmod(4)
-               Bs3 = Tblmod(5)
-               Bs2 = Tblmod(6)
-               Bs1 = Tblmod(7)
-               Pwr3s = Tmps
+               Bl4 = Tblmod(4)
+               Bl3 = Tblmod(5)
+               Bl2 = Tblmod(6)
+               Bl1 = Tblmod(7)
+               Pwr3s = -tmplvar
                Print #1 , "Pwr3s=" ; Pwr3s                  'W
 
-               Bs4 = Tblmod(8)
-               Bs3 = Tblmod(9)
-               Bs2 = Tblmod(10)
-               Bs1 = Tblmod(11)
-               Pwra = Tmps
+               Bl4 = Tblmod(8)
+               Bl3 = Tblmod(9)
+               Bl2 = Tblmod(10)
+               Bl1 = Tblmod(11)
+               Pwra = -tmplvar
                Print #1 , "Pwra=" ; Pwra                    'Wh
 
-               Bs4 = Tblmod(12)
-               Bs3 = Tblmod(13)
-               Bs2 = Tblmod(14)
-               Bs1 = Tblmod(15)
-               Pwrb = Tmps
+               Bl4 = Tblmod(12)
+               Bl3 = Tblmod(13)
+               Bl2 = Tblmod(14)
+               Bl1 = Tblmod(15)
+               Pwrb = -tmplvar
                Print #1 , "Pwrb=" ; Pwrb
 
-               Bs4 = Tblmod(16)
-               Bs3 = Tblmod(17)
-               Bs2 = Tblmod(18)
-               Bs1 = Tblmod(19)
-               Pwrc = Tmps
+               Bl4 = Tblmod(16)
+               Bl3 = Tblmod(17)
+               Bl2 = Tblmod(18)
+               Bl1 = Tblmod(19)
+               Pwrc = -tmplvar
                Print #1 , "Pwrc=" ; Pwrc
 
 

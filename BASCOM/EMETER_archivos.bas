@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 332
+$projecttime = 336
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -475,28 +475,28 @@ Sub Rxmdb()
                Bdw3 = Tblmod(5)
                Bdw2 = Tblmod(6)
                Bdw1 = Tblmod(7)
-               Eag3s = Tmpdw / 100
+               Eag3s = Tmpdw * 100
                Print #1 , "Eag3s=" ; Eag3s
 
                Bdw4 = Tblmod(8)
                Bdw3 = Tblmod(9)
                Bdw2 = Tblmod(10)
                Bdw1 = Tblmod(11)
-               Eag = Tmpdw / 100
+               Eag = Tmpdw * 100
                Print #1 , "Eag=" ; Eag
 
                Bdw4 = Tblmod(12)
                Bdw3 = Tblmod(13)
                Bdw2 = Tblmod(14)
                Bdw1 = Tblmod(15)
-               Ebg = Tmpdw / 100
+               Ebg = Tmpdw * 100
                Print #1 , "Ebg=" ; Ebg
 
                Bdw4 = Tblmod(16)
                Bdw3 = Tblmod(17)
                Bdw2 = Tblmod(18)
                Bdw1 = Tblmod(19)
-               Ecg = Tmpdw / 100
+               Ecg = Tmpdw * 100
                Print #1 , "Ecg=" ; Ecg
 
             Case 3:                                         '102e

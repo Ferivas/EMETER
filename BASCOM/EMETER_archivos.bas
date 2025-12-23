@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 336
+$projecttime = 339
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -551,6 +551,20 @@ Sub Rxmdb()
                Freq = Tmpdw / 1000
                Print #1 , "frec=" ; Freq
 
+            Case 5:
+               Bdw4 = Tblmod(4)
+               Bdw3 = Tblmod(5)
+               Bdw2 = Tblmod(6)
+               Bdw1 = Tblmod(7)
+               Print #1 , "CT=" ; Tmpdw
+
+               Bdw4 = Tblmod(8)
+               Bdw3 = Tblmod(9)
+               Bdw2 = Tblmod(10)
+               Bdw1 = Tblmod(11)
+               Print #1 , "VT=" ; Tmpdw
+
+
             Case Else:
                Print #1 , "Ptr no val"
 
@@ -991,6 +1005,7 @@ Data &H100E%                                                'Corriente
 Data &H10AE%                                                '3-PHASE SYS. GENERATED ACTIVE ENERGY
 Data &H102E%                                                'PWR Activa
 Data &H103E%                                                'Energia + Frecuencia
+Data &H11A0
 
 
 Tbl_err:

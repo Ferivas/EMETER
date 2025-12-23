@@ -15,8 +15,8 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 98
-$version 0 , 0 , 127
+$projecttime = 100
+$version 0 , 0 , 128
 
 
 $lib "modbus.lbx"
@@ -27,7 +27,7 @@ Const Numtxaut_mas_uno = Numtxaut + 1
 Const Addr0 = &H1000
 Const Addr1 = &H1046
 Const Numregtblmod = 64
-Const Numlecmdb = 5
+Const Numlecmdb = 6
 
 
 'Configuracion de entradas/salidas

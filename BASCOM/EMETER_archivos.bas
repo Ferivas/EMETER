@@ -505,7 +505,7 @@ Sub Rxmdb()
                Bl3 = Tblmod(5)
                Bl2 = Tblmod(6)
                Bl1 = Tblmod(7)
-               Pwr3s = -tmplvar
+               Pwr3s = tmplvar
                Print #1 , "Pwr3s=" ; Pwr3s                  'W
 
                Bl4 = Tblmod(8)

@@ -505,28 +505,28 @@ Sub Rxmdb()
                Bl3 = Tblmod(5)
                Bl2 = Tblmod(6)
                Bl1 = Tblmod(7)
-               Pwr3s = Tmplvar
+               Pwr3s = -tmplvar
                Print #1 , "Pwr3s=" ; Pwr3s                  'W
 
                Bl4 = Tblmod(8)
                Bl3 = Tblmod(9)
                Bl2 = Tblmod(10)
                Bl1 = Tblmod(11)
-               Pwra = Tmplvar
+               Pwra = -tmplvar
                Print #1 , "Pwra=" ; Pwra                    'Wh
 
                Bl4 = Tblmod(12)
                Bl3 = Tblmod(13)
                Bl2 = Tblmod(14)
                Bl1 = Tblmod(15)
-               Pwrb = Tmplvar
+               Pwrb = -tmplvar
                Print #1 , "Pwrb=" ; Pwrb
 
                Bl4 = Tblmod(16)
                Bl3 = Tblmod(17)
                Bl2 = Tblmod(18)
                Bl1 = Tblmod(19)
-               Pwrc = Tmplvar
+               Pwrc = -tmplvar
                Print #1 , "Pwrc=" ; Pwrc
 
 

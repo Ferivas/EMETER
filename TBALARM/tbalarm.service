@@ -1,0 +1,15 @@
+[Unit]
+Description=Monitoreo Dispositivos Thingsboard Molukas
+After=multi-user.target
+
+[Service]
+Type=idle
+Restart=always
+
+WorkingDirectory=/home/pi/EMETER/TBALARM/
+User=pi
+
+ExecStart=/usr/bin/python3 /home/pi/EMETER/TBALARM/emeteralarm.py &
+
+[Install]
+WantedBy=multi-user.target

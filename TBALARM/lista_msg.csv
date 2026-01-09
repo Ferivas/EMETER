@@ -1,0 +1,50 @@
+N,MSG,
+1,Se abrio la puerta de la estacion,D
+2,Se cerro la puerta de la estacion,D
+3,Se suspendio voltaje de alimentacion de la red comercial AC1,D
+4,Se reestablecio voltaje de alimentacion de red comercial AC1,D
+5,Se suspendio voltaje de alimentacion de la red comercial AC2,D
+6,Se reestablecio voltaje de alimentacion de red comercial AC2,D
+7,Voltaje de entrada alcanzo el minimo,D
+8,Voltaje de entrada supero el maximo,D
+9,Voltaje de baterias alcanzo el minimo,D
+10,Voltaje de baterias supero el maximo ,D
+11,Se desactivo el sensor de humo,D
+12,Se activo el sensor de humo,D
+13,Se desactivo el sensor de nivel,D
+14,Se activo el sensor de nivel,D
+15,Se desactivo salida 1,D
+16,Se activo salida 1,D
+17,Se desactivo salida 2,D
+18,Se activo salida 2,D
+19,Sensor de humedad alcanzo el minimo,D
+20,Sensor de humedad supero el maximo,D
+21,Sensor de temperatura alcanzo el minimo,D
+22,Sensor de temperatura supero el maximo,D
+23,Se suspendio voltaje de alimentación del Generador,D
+24,Se activo voltaje de alimentación del Generador,D
+25,Se activo sensor N1,D
+26,Se activo sensor N1 ,D
+27,Se activo sensor N1 ,D
+28,Se activo sensor N1 ,D
+29,Internet normal,D
+30,Internet solo en red WiFi de respaldo,D
+31,Falla Internet de red interna,D
+32,Se detecto inundacion,D
+33,Sensor de nivel  en estado normal,D
+34,Falla potencia de generador,D
+35,Potencia alta,D
+36,Sin Voltaje fase A ,D
+37,Sin Voltaje fase B,D
+38,Sin Voltaje fase C,D
+39,Falla corriente fase A,D
+40,Falla corriente fase B,D
+41,Falla corriente fase C,D
+42,,
+43,,
+44,,
+45,,
+46,,
+47,,
+48,,
+49,,

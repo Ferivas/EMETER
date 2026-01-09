@@ -25,6 +25,7 @@ ARCHIVO_MSG="lista_msg.csv"
 FILELASTOPER="lastoper.p"
 FILESTAFIELDS="stafields.p"
 TFUTURO=300
+CABECERAMSG="MICROCENTRAL TILIVI. "
 
 
 formato1="%Y-%m-%dT%H:%M:%SZ"
@@ -173,7 +174,7 @@ def savealarmas(nombreditec,nameserv,ev,canaltst,datafecha,urliot,namefile):
     archivo=open(namefile,"a")
     #urlver=urliot+'/channels/'+canaltst
     print("Evento",ev)
-    msg="WATCHING INFORMA. "+nombreditec+". "+nameserv+". Detectado el "+horalocstr+"\r"
+    msg=CABECERAMSG+nombreditec+". "+nameserv+". Detectado el "+horalocstr+"\r"
     #msg=msg+", revisar "+urlver+"\r"
     print(msg)
     archivo.write(msg)
@@ -327,7 +328,7 @@ while True:
                 headers = {"X-Authorization": f"Bearer {token}"}
                 msg="Se genera nuevo Token Thingsboard DITECNET"
                 sndmsgtelegram(msg,CHATID,BOTID)
-            print(datacanal)
+            # ,print(datacanal)
             fechastr=datacanal[0]
             #print("Comp>",lastentry_oper[ptrditec],datacanal[9])
             if lastentry_oper[ptrditec]!=datacanal[9] and datacanal[9]>0:

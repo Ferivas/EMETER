@@ -319,14 +319,14 @@ while True:
                     print("Se renueva Token")
                     token = authenticate() 
                     headers = {"X-Authorization": f"Bearer {token}"}
-                    msg="Se renueva Token Thingsboard DITECNET por errores en lectura"
+                    msg="Se renueva Token Thingsboard EMETER por errores en lectura"
                     sndmsgtelegram(msg,CHATID,BOTID)                
                 
             if coderesponse==401:
                 print("Token no valido")
                 token = authenticate() 
                 headers = {"X-Authorization": f"Bearer {token}"}
-                msg="Se genera nuevo Token Thingsboard DITECNET"
+                msg="Se genera nuevo Token Thingsboard EMETER ALARM"
                 sndmsgtelegram(msg,CHATID,BOTID)
             # ,print(datacanal)
             fechastr=datacanal[0]

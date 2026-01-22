@@ -8,7 +8,7 @@
 '* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 $nocompile
-$projecttime = 341
+$projecttime = 348
 
 '*******************************************************************************
 'Declaracion de subrutinas
@@ -25,6 +25,7 @@ Declare Sub Txrpi()
 Declare Sub Procrpi()
 Declare Sub Txauto5()
 Declare Sub Txauto6()
+Declare Sub Txpta()
 
 '*******************************************************************************
 'Declaracion de variables
@@ -592,7 +593,8 @@ End Sub
 
 Sub Txrpi()
    Trytx = 0
-   Reset Txok
+   'Reset Txok
+   reSet Txok
    Do
       Incr Trytx
       Print #1 , "Espera RPI " ; Trytx
@@ -685,6 +687,19 @@ Sub Txauto6()
 
 End Sub
 
+ Sub Txpta()
+   Print #1 , "TXAUT6 ;" ; Time$ ; "," ; Date$
+'   Fechaed = Date$
+'   Horaed = Time$
+   Atsnd = "A" + "," + Fechaed + "," + Horaed + "," + Idserial + "-6"
+   Atsnd = Atsnd + "," + Str(spuerta) + "," + Str(cntrini) + ",,,,,,"
+   Tmpw = Len(atsnd)
+   Tmpcrc32 = Crc32(atsnd , Tmpw)
+   Atsnd = Atsnd + "&" + Hex(tmpcrc32)                      '+ Chr(10)
+   Print #1 , "$" ; Atsnd
+   'Print #2 , "$" ; Atsnd
+   Call Txrpi()
+ End Sub
 
 '*******************************************************************************
 ' Procesamiento de datos del RPi

@@ -15,8 +15,8 @@ $hwstack = 128
 $swstack = 128
 $framesize = 128
 
-$projecttime = 100
-$version 0 , 0 , 132
+$projecttime = 112
+$version 0 , 0 , 137
 
 
 $lib "modbus.lbx"
@@ -109,6 +109,10 @@ Do
 Loop Until Actclk = 1
 Estado_led = 1
 
+'**************************************************************************
+' Para depurar sin RPI no olvidar cambiar Reset Txok en sub Txrpi()
+'**************************************************************************
+
 Do
 
    If Sernew = 1 Then                                       'DATOS SERIAL 1
@@ -161,7 +165,12 @@ Do
          If Spuerta = 0 Then
             Print#1 , "Spuerta=" ; Spuerta
             Spuertaant = Spuerta
-            Set Iniauto.5
+            Tmpl = Syssec()
+            Tmpl = Tmpl - 1
+            Fechaed = Date(tmpl)
+            Horaed = Time(tmpl)
+            Call Txpta()
+            'Set Iniauto.5
          End If
       End If
    Else
@@ -170,7 +179,12 @@ Do
          If Spuerta = 1 Then
             Print#1 , "Spuerta=" ; Spuerta
             Spuertaant = Spuerta
-            Set Iniauto.5
+            Tmpl = Syssec()
+            Tmpl = Tmpl + 1
+            Fechaed = Date(tmpl)
+            Horaed = Time(tmpl)
+            Call Txpta()
+            'Set Iniauto.5
          End If
       End If
    End If

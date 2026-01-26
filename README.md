@@ -103,6 +103,16 @@ Es necesario correr primero el script control.py y configurar el canal de listad
 El canal de IBT debe tener una entrada con el IDserial del ATMega1284P que lee por Modbus los registros del EMETER.<br>
 Monitoreo de tempeartura del Rpi en http://iot.watching.com.ec:3000/channels/357
 
+## CONFIGURACION DE ALARMAS EN TELEGRAM
+En el archivo varemeter.json se configura el CHATID y el BOTID para monitoreo (básicamente reportes cuando se generan los token o hay falla por no poder tener un token válido para empezar a monitorear) <br>
+
+{"timeout": 360, "url": "https://thingsboard.cloud", "user": "usertb@gmail.com", "password": "passwordusuarioTB", "chatid": "CHATID", "tokentgram": " BOTID", "filedevices": "Devices.CSV", "piflag": "true"}
+
+Para configurar en Telegram el grupo donde llegan los reportes es necesario configurar el CHATID y el TOKENID en las líneas de los dispositivos de la lista Devices.csv<br>
+No,DITEC,CANAL,URL,Hab alarmas,CHATID,BOTID,TWILIO sid,Twilio Token,NUM TELEFONO,dummy<br>
+1,EMETER,iddevice,https://thingsboard.cloud,1,CHATID,TOKENID,AC812626cASDGEHQGFHGWW4e17e31806,LKALSLSAJSKJKSba9bbda37094b13,,D
+
+
 
 
 

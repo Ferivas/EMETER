@@ -16,7 +16,7 @@ $swstack = 128
 $framesize = 128
 
 $projecttime = 112
-$version 0 , 0 , 137
+$version 0 , 0 , 138
 
 
 $lib "modbus.lbx"
@@ -137,6 +137,11 @@ Do
 
             Case 3:
                Print #1 , "AUT3"
+               Atsnd = "ACTCLK"
+               Tmpw = Len(atsnd)
+               Tmpcrc32 = Crc32(atsnd , Tmpw)
+               Atsnd = Atsnd + "&" + Hex(tmpcrc32)                '+ Chr(10)
+               Print #1 , "$" ; Atsnd
 
             Case 4:
                'Print #1 , "Read MDB"

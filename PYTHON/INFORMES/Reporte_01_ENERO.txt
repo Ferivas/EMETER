@@ -1,0 +1,7 @@
+📊 REPORTE DE GENERACIÓN - MES 01 (ENERO)
+---------------------------------------------
+⚡ Energía Total: 31.26 MWh
+📈 Promedio Diario: 1.04 MWh/día
+✅ Disponibilidad: 72.65%
+⏳ Parada más larga: 5d 12h 45min
+📅 Rango: 01/01/26 al 30/01/26

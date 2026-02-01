@@ -113,9 +113,9 @@ borrar_telemetria(
     device_id=DEVICEID, #DAMMER
     #device_id='9b48c2f0-af8a-11f0-b150-2710a8915e1d', #CONDADO
     #device_id='992a11e0-4c93-11f0-b94b-f3b14d0c4306', #DITECNET LABORATORIO
-    keys= 'POWER_FULL_A,POWER_FULL_B,POWER_FULL_C,POWER_FULL_SUMMARY',
-    fecha_inicio='2025-12-30 08:30:00',
+    keys= 'POWER_FULL_SUMMARY,Eg3s',
+    fecha_inicio='2026-01-30 00:10:00',
     #fecha_inicio='2025-11-05',
-    fecha_fin='2026-12-30 14:20:00'
+    fecha_fin='2026-01-30 00:50:00'
     #fecha_fin='2025-11-06'
 )

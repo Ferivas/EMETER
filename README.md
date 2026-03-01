@@ -62,7 +62,7 @@ Esta tarjeta consulta los registros erqueridos al Emeter y envía la informació
 Se tiene tres leds de señalización en esta tarjeta. Dos de ellos (LED2 y LED3) muestran la transmisión y recepción de datos en el bus modbus. El LED3 parpadea cuando el maestro envia datos al escalvo y el LED2 parpadea cuando se recibe una respuesta del esclavo. El LED2 (led blanco) señaliza si existe comunicación entre la tarjeta y el Raspberry. Si no se ha establecido comunicaicón este led parpadea 2 veces cada segundo, mientras que si la comunicación es normal el led parpadea una vez por segundo.
 
 ### CONVERSOR DC-DC ELEVADOR
-Para asegurar el respaldo de energía de la alimentación del emter se utiliza la salida de 9VDC del miniUPS para que el conversor elevador suba este voltaje hasta 24VDC.
+Para asegurar el respaldo de energía de la alimentación del Emeter se utiliza la salida de 9VDC del miniUPS para que el conversor elevador suba este voltaje hasta 24VDC.
 
 ### ROUTER LTE
 Para poder utilizar internet para las comunicaciones se utiliza un router LTE marca Cudy. Este genera una red Wifi donde se conecta el Raspberry Pi para enviar los datos a la plataforma de monitoreo
@@ -111,6 +111,13 @@ En el archivo varemeter.json se configura el CHATID y el BOTID para monitoreo (b
 Para configurar en Telegram el grupo donde llegan los reportes es necesario configurar el CHATID y el TOKENID en las líneas de los dispositivos de la lista Devices.csv<br>
 No,DITEC,CANAL,URL,Hab alarmas,CHATID,BOTID,TWILIO sid,Twilio Token,NUM TELEFONO,dummy<br>
 1,EMETER,iddevice,https://thingsboard.cloud,1,CHATID,TOKENID,AC812626cASDGEHQGFHGWW4e17e31806,LKALSLSAJSKJKSba9bbda37094b13,,D
+
+## GENERACION DE REPORTES MENSUALES
+1. Descargar archivo YYMM_IDSERIAL-5.csv del directorio DITEC-RPI/PYTHON/DATOS con Filezilla (el host y el puerto se leen desde remote.it)
+2. Editar reportemeter.json con el nombre del archivo descargado en el paos anterior
+3. Correr Reporte_integral.py en python
+4. Correr Snd_rporte_telegram.py con MSGTEST=True para verificar el reporte
+5. Correr Snd_rporte_telegram.py con MSGTEST=False para enviar reporte a grupo EMETER
 
 
 
